@@ -1261,6 +1261,36 @@
                 prices: [7.5, 5.25, 4.875, 4.125, 4.125],
                 minimumWeight: 30,
                 minimumFreight: 10 + (30-1)*7.5
+            },
+            // 天津
+            {
+                province: "天津",
+                destination: "天津",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 11,
+                prices: [2.0, 1.5, 1, 0.9, 0.8],
+                minimumWeight: 5,
+                minimumFreight: 11 + (5-1)*2.0
+            },
+            // 河北省
+            {
+                province: "河北省",
+                destination: "承德市/唐山市/保定市/秦皇岛市/张家口市/邯郸市/石家庄市/衡水市/邢台市/沧州市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 12,
+                prices: [2.5, 1.5, 1.3, 1.2, 1.1],
+                minimumWeight: 50,
+                minimumFreight: 12 + (50-1)*2.5
+            },
+            // 北京/河北省
+            {
+                province: "北京/河北省",
+                destination: "北京/廊坊",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 13,
+                prices: [2.0, 1.3, 1.2, 1.1, 1],
+                minimumWeight: 5,
+                minimumFreight: 13 + (5-1)*2.0  // 修正：使用正确的单价2.0而不是7.5
             }
         ];
 
@@ -1527,5 +1557,6 @@
         });
     </script>
 </body>
-
 </html>
+
+
