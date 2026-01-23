@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天津始发陆运件运费计算器 - 完整增强版</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1a6dcc 0%, #0d4d9c 100%);
+            color: white;
+            padding: 25px 30px;
+            position: relative;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .logo {
+            font-size: 40px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .content {
+            display: flex;
+            padding: 0;
+        }
+        
+        .calculator-section {
+            flex: 1;
+            padding: 30px;
+            border-right: 1px solid #eee;
+        }
+        
+        .info-section {
+            flex: 1;
+            padding: 30px;
+            background-color: #f9fbfd;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 15px;
+        }
+        
+        .select-wrapper, .input-wrapper {
+            position: relative;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #d1d9e6;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: #1a6dcc;
+            box-shadow: 0 0 0 3px rgba(26, 109, 204, 0.1);
+        }
+        
+        .weight-input {
+            display: flex;
+            align-items: center;
+        }
+        
+        .weight-input input {
+            flex: 1;
+        }
+        
+        .unit {
+            position: absolute;
+            right: 16px;
+            color: #666;
+            font-size: 15px;
+        }
+        
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e1e8f0;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            color: #1a6dcc;
+            border-bottom: 3px solid #1a6dcc;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .product-calculator {
+            background-color: #f9fbfd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #e1e8f0;
+        }
+        
+        .product-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .product-row:last-child {
+            border-bottom: none;
+        }
+        
+        .product-name {
+            flex: 2;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .product-weight {
+            flex: 1;
+            text-align: center;
+            color: #666;
+        }
+        
+        .product-quantity {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            border: 1px solid #d1d9e6;
+            border-radius: 6px;
+            overflow: hidden;
+            background-color: white;
+        }
+        
+        .qty-btn {
+            background-color: #f5f7fa;
+            border: none;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a6dcc;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+        
+        .qty-btn:hover {
+            background-color: #eef5ff;
+        }
+        
+        .qty-btn:active {
+            background-color: #d1e3ff;
+        }
+        
+        .product-quantity input {
+            width: 50px;
+            padding: 8px 4px;
+            text-align: center;
+            border: none;
+            border-left: 1px solid #d1d9e6;
+            border-right: 1px solid #d1d9e6;
+            border-radius: 0;
+        }
+        
+        .product-quantity input:focus {
+            box-shadow: none;
+            border-color: #d1d9e6;
+        }
+        
+        .product-subtotal {
+            flex: 1;
+            text-align: right;
+            font-weight: 600;
+            color: #1a6dcc;
+        }
+        
+        .additional-charges {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e1e8f0;
+        }
+        
+        .additional-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .additional-option label {
+            margin-bottom: 0;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox-container input {
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .summary-box {
+            background-color: #eef5ff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid #d1e3ff;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .summary-row.total {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0d4d9c;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #c5d9ff;
+        }
+        
+        .apply-weight-btn {
+            background: linear-gradient(135deg, #1a6dcc 0%, #0d4d9c 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+            width: 100%;
+        }
+        
+        .apply-weight-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(26, 109, 204, 0.2);
+        }
+        
+        .apply-weight-btn:active {
+            transform: translateY(0);
+        }
+        
+        .calculate-btn {
+            background: linear-gradient(135deg, #1a6dcc 0%, #0d4d9c 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(26, 109, 204, 0.2);
+        }
+        
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+        
+        .result-section {
+            margin-top: 35px;
+            background-color: #f9fbfd;
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid #e1e8f0;
+        }
+        
+        .result-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        
+        .result-title i {
+            margin-right: 10px;
+            color: #1a6dcc;
+        }
+        
+        .result-detail {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .result-row:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .result-value {
+            font-weight: 600;
+            color: #1a6dcc;
+        }
+        
+        .total-row {
+            font-size: 18px;
+            color: #2c3e50;
+            padding-top: 15px;
+            margin-top: 15px;
+            border-top: 2px solid #e1e8f0;
+        }
+        
+        .total-row .result-value {
+            font-size: 24px;
+            color: #0d4d9c;
+        }
+        
+        .info-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #1a6dcc;
+        }
+        
+        .info-card h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-card h3 i {
+            margin-right: 10px;
+            color: #1a6dcc;
+        }
+        
+        .info-card ul {
+            padding-left: 20px;
+        }
+        
+        .info-card li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+        
+        .weight-range-info {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            gap: 10px;
+        }
+        
+        .range-tag {
+            background-color: #eef5ff;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 13px;
+            color: #1a6dcc;
+            border: 1px solid #d1e3ff;
+        }
+        
+        .company-name {
+            font-weight: 700;
+            color: #1a6dcc;
+        }
+        
+        .contact-info {
+            background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .contact-info h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .contact-detail i {
+            width: 24px;
+            color: #1a6dcc;
+            margin-right: 12px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .calculator-section, .info-section {
+                border-right: none;
+                border-bottom: 1px solid #eee;
+            }
+            
+            .product-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .product-name, .product-weight, .product-quantity, .product-subtotal {
+                width: 100%;
+                text-align: left;
+                margin-bottom: 10px;
+            }
+            
+            .product-quantity input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div>
+                    <h1>天津始发陆运件运费计算器 - 完整增强版</h1>
+                    <div class="subtitle">天津摩派空间科技 · 支持产品重量计算 · 全国地区覆盖</div>
+                </div>
+                <div class="logo">
+                    <i class="fas fa-truck-loading"></i>
+                </div>
+            </div>
+        </header>
+        
+        <div class="content">
+            <div class="calculator-section">
+                <h2 style="color: #2c3e50; margin-bottom: 25px; font-size: 22px;">运费计算</h2>
+                
+                <div class="form-group">
+                    <label for="province"><i class="fas fa-map-marker-alt"></i> 选择目的省份/地区</label>
+                    <div class="select-wrapper">
+                        <select id="province">
+                            <option value="">请选择目的省份/地区</option>
+                            <!-- 省份选项将通过JavaScript动态生成 -->
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="destination"><i class="fas fa-city"></i> 选择具体目的地</label>
+                    <div class="select-wrapper">
+                        <select id="destination" disabled>
+                            <option value="">请先选择省份</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="tab-container">
+                        <div class="tab active" data-tab="manual">手动输入重量</div>
+                        <div class="tab" data-tab="product">产品重量计算器</div>
+                    </div>
+                    
+                    <div class="tab-content active" id="manual-tab">
+                        <label for="weight"><i class="fas fa-weight-hanging"></i> 输入货物重量 (kg)</label>
+                        <div class="input-wrapper weight-input">
+                            <input type="number" id="weight" min="1" step="0.1" placeholder="例如：30">
+                            <div class="unit">公斤</div>
+                        </div>
+                        <div class="weight-range-info">
+                            <span class="range-tag">1-50kg</span>
+                            <span class="range-tag">50-100kg</span>
+                            <span class="range-tag">100-300kg</span>
+                            <span class="range-tag">300-500kg</span>
+                            <span class="range-tag">500kg以上</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="product-tab">
+                        <div class="product-calculator">
+                            <div class="product-row">
+                                <div class="product-name">灯条（单个）</div>
+                                <div class="product-weight">0.5 kg</div>
+                                <div class="product-quantity">
+                                    <div class="quantity-control">
+                                        <button class="qty-btn qty-minus" data-target="product1">-</button>
+                                        <input type="number" min="0" class="product-qty" data-weight="0.5" data-product="灯条" id="product1" value="0">
+                                        <button class="qty-btn qty-plus" data-target="product1">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-subtotal" id="subtotal-product1">0 kg</div>
+                            </div>
+                            
+                            <div class="product-row">
+                                <div class="product-name">三米货架</div>
+                                <div class="product-weight">82.8 kg</div>
+                                <div class="product-quantity">
+                                    <div class="quantity-control">
+                                        <button class="qty-btn qty-minus" data-target="product2">-</button>
+                                        <input type="number" min="0" class="product-qty" data-weight="82.8" data-product="三米货架" id="product2" value="0">
+                                        <button class="qty-btn qty-plus" data-target="product2">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-subtotal" id="subtotal-product2">0 kg</div>
+                            </div>
+                            
+                            <div class="product-row">
+                                <div class="product-name">边缘设备</div>
+                                <div class="product-weight">38 kg</div>
+                                <div class="product-quantity">
+                                    <div class="quantity-control">
+                                        <button class="qty-btn qty-minus" data-target="product3">-</button>
+                                        <input type="number" min="0" class="product-qty" data-weight="38" data-product="边缘设备" id="product3" value="0">
+                                        <button class="qty-btn qty-plus" data-target="product3">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-subtotal" id="subtotal-product3">0 kg</div>
+                            </div>
+                            
+                            <div class="product-row">
+                                <div class="product-name">摄像头（单个）</div>
+                                <div class="product-weight">1 kg</div>
+                                <div class="product-quantity">
+                                    <div class="quantity-control">
+                                        <button class="qty-btn qty-minus" data-target="product4">-</button>
+                                        <input type="number" min="0" class="product-qty" data-weight="1" data-product="摄像头" id="product4" value="0">
+                                        <button class="qty-btn qty-plus" data-target="product4">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-subtotal" id="subtotal-product4">0 kg</div>
+                            </div>
+                            
+                            <div class="product-row">
+                                <div class="product-name">门禁（一套）</div>
+                                <div class="product-weight">4 kg</div>
+                                <div class="product-quantity">
+                                    <div class="quantity-control">
+                                        <button class="qty-btn qty-minus" data-target="product5">-</button>
+                                        <input type="number" min="0" class="product-qty" data-weight="4" data-product="门禁" id="product5" value="0">
+                                        <button class="qty-btn qty-plus" data-target="product5">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-subtotal" id="subtotal-product5">0 kg</div>
+                            </div>
+                            
+                            <div class="product-row">
+                                <div class="product-name">快递柜500宽（单个）</div>
+                                <div class="product-weight">217 kg</div>
+                                <div class="product-quantity">
+                                    <div class="quantity-control">
+                                        <button class="qty-btn qty-minus" data-target="product6">-</button>
+                                        <input type="number" min="0" class="product-qty" data-weight="217" data-product="快递柜500宽" id="product6" value="0">
+                                        <button class="qty-btn qty-plus" data-target="product6">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-subtotal" id="subtotal-product6">0 kg</div>
+                            </div>
+                            
+                            <div class="product-row">
+                                <div class="product-name">快递柜350宽（单个）</div>
+                                <div class="product-weight">143 kg</div>
+                                <div class="product-quantity">
+                                    <div class="quantity-control">
+                                        <button class="qty-btn qty-minus" data-target="product7">-</button>
+                                        <input type="number" min="0" class="product-qty" data-weight="143" data-product="快递柜350宽" id="product7" value="0">
+                                        <button class="qty-btn qty-plus" data-target="product7">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-subtotal" id="subtotal-product7">0 kg</div>
+                            </div>
+                            
+                            <div class="additional-charges">
+                                <div class="additional-option">
+                                    <label for="add-cables">
+                                        <i class="fas fa-box"></i> 包含一箱夹子和信号线（固定重量：5kg）
+                                    </label>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" id="add-cables" data-weight="5" data-charge="0">
+                                        <span>添加</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="additional-option">
+                                    <label for="add-shelf-fee">
+                                        <i class="fas fa-tools"></i> 货架加长费（如果有货架）
+                                    </label>
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" id="add-shelf-fee" data-weight="0" data-charge="25">
+                                        <span>添加</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="summary-box">
+                                <div class="summary-row">
+                                    <span>产品总重量：</span>
+                                    <span id="products-total">0 kg</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>附加重量：</span>
+                                    <span id="additional-weight">0 kg</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>附加费用：</span>
+                                    <span id="additional-charge">0 元</span>
+                                </div>
+                                <div class="summary-row total">
+                                    <span>总计重量：</span>
+                                    <span id="total-weight">0 kg</span>
+                                </div>
+                            </div>
+                            
+                            <button class="apply-weight-btn" id="applyWeightBtn">
+                                <i class="fas fa-calculator"></i> 应用此重量到运费计算
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="calculate-btn" id="calculateBtn">
+                    <i class="fas fa-calculator"></i> 计算运费
+                </button>
+                
+                <div class="result-section" id="resultSection" style="display: none;">
+                    <div class="result-title">
+                        <i class="fas fa-file-invoice-dollar"></i> 运费计算结果
+                    </div>
+                    <div class="result-detail">
+                        <div class="result-row">
+                            <span class="result-label">始发地</span>
+                            <span class="result-value" id="originResult">天津 (022)</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">目的地</span>
+                            <span class="result-value" id="destinationResult">-</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">收费方式</span>
+                            <span class="result-value" id="chargeMethodResult">对段加首重</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">货物重量</span>
+                            <span class="result-value" id="weightResult">- kg</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">附加费用</span>
+                            <span class="result-value" id="extraChargeResult">0 元</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">首重价格</span>
+                            <span class="result-value" id="firstWeightPriceResult">- 元</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">适用区间单价</span>
+                            <span class="result-value" id="unitPriceResult">- 元/kg</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">运费最低收费</span>
+                            <span class="result-value" id="minChargeResult">- 元</span>
+                        </div>
+                        <div class="result-row total-row">
+                            <span class="result-label">总运费</span>
+                            <span class="result-value" id="totalResult">- 元</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <div class="info-card">
+                    <h3><i class="fas fa-info-circle"></i> 运费计算规则</h3>
+                    <p style="margin-bottom: 12px;">运费计算公式：</p>
+                    <p style="background-color: #f0f7ff; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+                        <strong>运费 = 首重价格 + (计费重量 - 1) × 对应区间单价</strong>
+                    </p>
+                    <p style="margin-bottom: 15px;">重量区间说明：</p>
+                    <ul>
+                        <li><strong>(1,50]</strong>：1kg < 重量 ≤ 50kg</li>
+                        <li><strong>(50,100]</strong>：50kg < 重量 ≤ 100kg</li>
+                        <li><strong>(100,300]</strong>：100kg < 重量 ≤ 300kg</li>
+                        <li><strong>(300,500]</strong>：300kg < 重量 ≤ 500kg</li>
+                        <li><strong>(500,+∞)</strong>：重量 > 500kg</li>
+                    </ul>
+                    <p style="margin-top: 15px;">注：起重为30kg，运费最低收费按起重30kg计算</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3><i class="fas fa-boxes"></i> 产品重量明细</h3>
+                    <ul>
+                        <li><strong>灯条（单个）</strong>：0.5 kg</li>
+                        <li><strong>三米货架</strong>：82.8 kg</li>
+                        <li><strong>边缘设备</strong>：38 kg</li>
+                        <li><strong>摄像头（单个）</strong>：1 kg</li>
+                        <li><strong>门禁（一套）</strong>：4 kg</li>
+                        <li><strong>快递柜500宽（单个）</strong>：217 kg</li>
+                        <li><strong>快递柜350宽（单个）</strong>：143 kg</li>
+                        <li><strong>夹子和信号线（一箱）</strong>：5 kg（固定重量）</li>
+                        <li><strong>货架加长费</strong>：25元（费用，不计入重量）</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h3><i class="fas fa-shipping-fast"></i> 增值服务项</h3>
+                    <ul>
+                        <li>24H昼夜取派</li>
+                        <li>支持客户选择指定时间派送</li>
+                        <li>客户派前通知：派货前短信通知</li>
+                        <li>未派原因短信：若货物未派时，发送未派原因短信</li>
+                        <li>MSG服务：货物签收后15分钟内将以自动短信形式通知寄方</li>
+                        <li>自提区短信：如收件方为无网点区域则发送短信告知收方自提</li>
+                    </ul>
+                </div>
+                
+                <div class="contact-info">
+                    <h3><i class="fas fa-headset"></i> 联系方式</h3>
+                    <div class="contact-detail">
+                        <i class="fas fa-user"></i>
+                        <div><strong>专属商务：</strong> 黄绵柔</div>
+                    </div>
+                    <div class="contact-detail">
+                        <i class="fas fa-phone"></i>
+                        <div><strong>电话：</strong> 19065104547</div>
+                    </div>
+                    <div class="contact-detail">
+                        <i class="fas fa-envelope"></i>
+                        <div><strong>邮箱：</strong> 19065104547@ky-express.com</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 天津摩派空间科技 · 陆运件报价表 · 数据来源于《天津始发陆运件报价表》</p>
+            <p style="margin-top: 5px; font-size: 13px;">本计算器提供参考运费，实际运费以公司最终确认为准</p>
+        </footer>
+    </div>
+
+    <script>
+        // 完整运费数据（根据Excel表格整理）
+        const shippingData = [
+            // 上海/江苏省/浙江省
+            {
+                province: "上海/江苏省/浙江省",
+                destination: "苏州市/金华市/无锡市/南京市/宁波市/绍兴市/湖州市/嘉兴市/杭州市/常州市/扬州市/上海市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [2.25, 1.875, 1.575, 1.5, 1.35],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*2.25
+            },
+            {
+                province: "江苏省/浙江省",
+                destination: "泰州市/丽水市/南通市/台州市/镇江市/温州市/衢州市/宿迁市/徐州市/淮安市/盐城市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [2.625, 2.25, 1.95, 1.8, 1.575],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*2.625
+            },
+            {
+                province: "江苏省/浙江省",
+                destination: "连云港市/舟山市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [2.625, 2.25, 1.95, 1.8, 1.575],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*2.625
+            },
+            // 福建省
+            {
+                province: "福建省",
+                destination: "厦门市/福州市/漳州市/泉州市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 2.625, 2.475, 2.325, 2.25],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            {
+                province: "福建省",
+                destination: "宁德市/三明市/南平市/龙岩市/莆田市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 3, 2.85, 2.7, 2.625],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            // 山东省
+            {
+                province: "山东省",
+                destination: "日照市/烟台市/青岛市/威海市/济南市/潍坊市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 3, 2.85, 2.7, 2.625],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            {
+                province: "山东省",
+                destination: "德州市/东营市/滨州市/枣庄市/淄博市/菏泽市/泰安市/临沂市/聊城市/济宁市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 2.25, 1.95, 1.875, 1.8],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            // 四川省/重庆
+            {
+                province: "四川省/重庆",
+                destination: "重庆市/眉山市/成都市/资阳市/绵阳市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 2.625, 2.325, 2.25, 1.875],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            // 山西省
+            {
+                province: "山西省",
+                destination: "太原市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 2.25, 1.95, 1.875, 1.575],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            {
+                province: "山西省",
+                destination: "吕梁市/运城市/晋城市/临汾市/晋中市/长治市/大同市/阳泉市/忻州市/朔州市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 2.625, 2.1, 2.1, 1.95],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            // 贵州省
+            {
+                province: "贵州省",
+                destination: "贵阳市/遵义市/安顺市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 3.15, 3.15, 3, 2.7],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            {
+                province: "贵州省",
+                destination: "黔南布依族苗族自治州/黔西南布依族苗族自治州/毕节市/六盘水市/黔东南苗族侗族自治州/铜仁市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 3.75, 3.75, 3.6, 3.45],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            // 广东省
+            {
+                province: "广东省",
+                destination: "深圳市/惠州市/江门市/中山市/东莞市/珠海市/广州市/佛山市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [2.25, 1.95, 1.95, 1.95, 1.575],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*2.25
+            },
+            {
+                province: "广东省",
+                destination: "汕头市/清远市/肇庆市/河源市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3, 2.25, 2.25, 2.25, 1.95],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3
+            },
+            {
+                province: "广东省",
+                destination: "云浮市/梅州市/阳江市/揭阳市/韶关市/汕尾市/湛江市/茂名市/潮州市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3, 2.25, 2.25, 2.25, 1.95],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3
+            },
+            // 湖南省
+            {
+                province: "湖南省",
+                destination: "湘潭市/长沙市/株洲市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 2.625, 2.325, 2.25, 2.025],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            {
+                province: "湖南省",
+                destination: "湘西土家族苗族自治州/张家界市/岳阳市/娄底市/邵阳市/常德市/益阳市/怀化市/衡阳市/郴州市/永州市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 3, 2.85, 2.7, 2.625],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            // 湖北省
+            {
+                province: "湖北省",
+                destination: "襄阳市/武汉市/鄂州市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 2.25, 2.025, 1.95, 1.725],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            {
+                province: "湖北省",
+                destination: "随州市/恩施土家族苗族自治州/十堰市/神农架林区/荆州市/潜江市/天门市/仙桃市/宜昌市/黄石市/咸宁市/孝感市/荆门市/黄冈市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 3.375, 3.375, 3.225, 3],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            // 安徽省
+            {
+                province: "安徽省",
+                destination: "合肥市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3, 2.25, 1.95, 1.95, 1.575],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3
+            },
+            {
+                province: "安徽省",
+                destination: "马鞍山市/宣城市/芜湖市/滁州市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3, 2.475, 2.25, 2.25, 1.875],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3
+            },
+            {
+                province: "安徽省",
+                destination: "安庆市/宿州市/淮南市/池州市/蚌埠市/六安市/淮北市/铜陵市/亳州市/阜阳市/黄山市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3, 2.7, 2.625, 2.55, 2.25],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3
+            },
+            // 四川省
+            {
+                province: "四川省",
+                destination: "宜宾市/内江市/泸州市/广元市/南充市/达州市/广安市/巴中市/德阳市/雅安市/自贡市/遂宁市/乐山市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 3, 2.7, 2.625, 2.475],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            {
+                province: "四川省",
+                destination: "阿坝藏族羌族自治州/甘孜藏族自治州/凉山彝族自治州/攀枝花市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [7.5, 6.75, 6.75, 6.75, 6.75],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*7.5
+            },
+            // 新疆维吾尔自治区
+            {
+                province: "新疆维吾尔自治区",
+                destination: "乌鲁木齐市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [7.5, 5.25, 4.875, 4.125, 4.125],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*7.5
+            },
+            // 河南省
+            {
+                province: "河南省",
+                destination: "许昌市/开封市/郑州市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3, 2.625, 2.625, 2.25, 2.1],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3
+            },
+            {
+                province: "河南省",
+                destination: "安阳市/周口市/新乡市/漯河市/鹤壁市/商丘市/濮阳市/济源市/焦作市/洛阳市/三门峡市/信阳市/南阳市/驻马店市/平顶山市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 3, 3, 2.625, 2.25],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            // 广西壮族自治区
+            {
+                province: "广西壮族自治区",
+                destination: "崇左市/南宁市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3, 2.625, 2.625, 2.25, 1.95],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3
+            },
+            {
+                province: "广西壮族自治区",
+                destination: "百色市/钦州市/贺州市/梧州市/贵港市/玉林市/柳州市/来宾市/桂林市/防城港市/河池市/北海市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 2.85, 2.85, 2.625, 2.475],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            // 海南省
+            {
+                province: "海南省",
+                destination: "三沙市/昌江黎族自治县/临高县/琼中黎族苗族自治县/屯昌县/琼海市/陵水黎族自治县/澄迈县/海口市/保亭黎族苗族自治县/定安县/五指山市/儋州市/东方市/文昌市/万宁市/白沙黎族自治县/乐东黎族自治县/三亚市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 3.75, 3.75, 3.375, 3],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            // 江西省
+            {
+                province: "江西省",
+                destination: "南昌市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 2.625, 2.325, 2.25, 2.025],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            {
+                province: "江西省",
+                destination: "景德镇市/萍乡市/吉安市/赣州市/抚州市/宜春市/九江市/上饶市/新余市/鹰潭市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3, 2.85, 2.625, 2.475, 2.475],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3
+            },
+            // 云南省
+            {
+                province: "云南省",
+                destination: "昆明市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 2.625, 2.475, 2.4, 2.25],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            // 甘肃省
+            {
+                province: "甘肃省",
+                destination: "临夏回族自治州/甘南藏族自治州/兰州市/天水市/陇南市/张掖市/嘉峪关市/酒泉市/庆阳市/金昌市/武威市/定西市/白银市/平凉市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [7.5, 3.375, 3.225, 3.225, 3],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*7.5
+            },
+            // 陕西省
+            {
+                province: "陕西省",
+                destination: "咸阳市/西安市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 2.625, 2.325, 2.25, 1.875],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            {
+                province: "陕西省",
+                destination: "铜川市/汉中市/宝鸡市/商洛市/安康市/榆林市/渭南市/延安市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 3, 2.7, 2.625, 2.475],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            // 辽宁省
+            {
+                province: "辽宁省",
+                destination: "大连市/本溪市/抚顺市/沈阳市/铁岭市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3, 2.625, 2.625, 2.625, 2.1],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3
+            },
+            {
+                province: "辽宁省",
+                destination: "鞍山市/朝阳市/辽阳市/营口市/阜新市/葫芦岛市/丹东市/锦州市/盘锦市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 3.225, 2.85, 2.775, 2.625],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            // 吉林省/黑龙江省
+            {
+                province: "吉林省/黑龙江省",
+                destination: "长春市/哈尔滨市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3, 2.625, 2.625, 2.625, 2.1],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3
+            },
+            {
+                province: "吉林省/黑龙江省",
+                destination: "通化市/大兴安岭地区/鹤岗市/白城市/伊春市/双鸭山市/延边朝鲜族自治州/绥化市/四平市/黑河市/鸡西市/牡丹江市/七台河市/吉林市/佳木斯市/齐齐哈尔市/白山市/辽源市/大庆市/松原市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [3.75, 3.225, 2.85, 2.775, 2.625],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*3.75
+            },
+            // 青海省
+            {
+                province: "青海省",
+                destination: "西宁市/海东市/海北藏族自治州/黄南藏族自治州/海南藏族自治州/果洛藏族自治州/玉树藏族自治州/海西蒙古族藏族自治州",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [7.5, 6.75, 6.75, 6.75, 6.75],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*7.5
+            },
+            // 宁夏回族自治区
+            {
+                province: "宁夏回族自治区",
+                destination: "银川市/石嘴山市/吴忠市/固原市/中卫市",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [7.5, 5.25, 4.875, 4.125, 4.125],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*7.5
+            },
+            // 西藏自治区
+            {
+                province: "西藏自治区",
+                destination: "拉萨市/日喀则市/昌都市/林芝市/山南市/那曲市/阿里地区",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [7.5, 7.5, 7.5, 7.5, 7.5],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*7.5
+            },
+            // 内蒙古自治区
+            {
+                province: "内蒙古自治区",
+                destination: "呼和浩特市/包头市/乌海市/赤峰市/通辽市/鄂尔多斯市/呼伦贝尔市/巴彦淖尔市/乌兰察布市/兴安盟/锡林郭勒盟/阿拉善盟",
+                chargeMethod: "对段加首重",
+                firstWeightPrice: 10,
+                prices: [7.5, 5.25, 4.875, 4.125, 4.125],
+                minimumWeight: 30,
+                minimumFreight: 10 + (30-1)*7.5
+            }
+        ];
+
+        // 获取所有不重复的省份
+        const provinces = [...new Set(shippingData.map(item => item.province))];
+        
+        // 初始化省份下拉菜单
+        const provinceSelect = document.getElementById('province');
+        provinces.forEach(province => {
+            const option = document.createElement('option');
+            option.value = province;
+            option.textContent = province;
+            provinceSelect.appendChild(option);
+        });
+        
+        // 当省份改变时，更新目的地下拉菜单
+        provinceSelect.addEventListener('change', function() {
+            const destinationSelect = document.getElementById('destination');
+            destinationSelect.innerHTML = '<option value="">请选择目的地</option>';
+            destinationSelect.disabled = !this.value;
+            
+            if (this.value) {
+                const filteredData = shippingData.filter(item => item.province === this.value);
+                filteredData.forEach(item => {
+                    const cities = item.destination.split('/');
+                    cities.forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city;
+                        option.textContent = city;
+                        option.dataset.dataIndex = shippingData.indexOf(item);
+                        destinationSelect.appendChild(option);
+                    });
+                });
+            }
+        });
+        
+        // 产品计算器功能
+        const productInputs = document.querySelectorAll('.product-qty');
+        const addCablesCheckbox = document.getElementById('add-cables');
+        const addShelfFeeCheckbox = document.getElementById('add-shelf-fee');
+        
+        // 更新产品重量计算
+        function updateProductCalculator() {
+            let productsTotal = 0;
+            let additionalWeight = 0;
+            let additionalCharge = 0;
+            
+            // 计算产品总重量
+            productInputs.forEach(input => {
+                const quantity = parseInt(input.value) || 0;
+                const weight = parseFloat(input.dataset.weight);
+                const subtotal = quantity * weight;
+                const productId = input.id;
+                
+                // 更新小计显示
+                const subtotalElement = document.getElementById(`subtotal-${productId}`);
+                if (subtotalElement) {
+                    subtotalElement.textContent = subtotal.toFixed(1) + ' kg';
+                }
+                
+                productsTotal += subtotal;
+            });
+            
+            // 检查附加项
+            if (addCablesCheckbox.checked) {
+                additionalWeight += parseFloat(addCablesCheckbox.dataset.weight);
+            }
+            
+            if (addShelfFeeCheckbox.checked) {
+                additionalCharge += parseFloat(addShelfFeeCheckbox.dataset.charge);
+            }
+            
+            // 更新显示
+            document.getElementById('products-total').textContent = productsTotal.toFixed(1) + ' kg';
+            document.getElementById('additional-weight').textContent = additionalWeight + ' kg';
+            document.getElementById('additional-charge').textContent = additionalCharge + ' 元';
+            
+            const totalWeight = productsTotal + additionalWeight;
+            document.getElementById('total-weight').textContent = totalWeight.toFixed(1) + ' kg';
+            
+            // 返回总重量和附加费用
+            return {
+                totalWeight: totalWeight,
+                additionalCharge: additionalCharge
+            };
+        }
+        
+        // 为产品数量加减按钮添加事件监听
+        document.querySelectorAll('.qty-plus').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.dataset.target;
+                const input = document.getElementById(targetId);
+                input.value = parseInt(input.value) + 1;
+                updateProductCalculator();
+            });
+        });
+        
+        document.querySelectorAll('.qty-minus').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.dataset.target;
+                const input = document.getElementById(targetId);
+                const currentValue = parseInt(input.value);
+                if (currentValue > 0) {
+                    input.value = currentValue - 1;
+                    updateProductCalculator();
+                }
+            });
+        });
+        
+        // 为产品输入框添加事件监听
+        productInputs.forEach(input => {
+            input.addEventListener('input', updateProductCalculator);
+        });
+        
+        // 为附加选项添加事件监听
+        addCablesCheckbox.addEventListener('change', updateProductCalculator);
+        addShelfFeeCheckbox.addEventListener('change', updateProductCalculator);
+        
+        // 应用重量按钮
+        document.getElementById('applyWeightBtn').addEventListener('click', function() {
+            const calculatorResult = updateProductCalculator();
+            const weightInput = document.getElementById('weight');
+            
+            // 将计算出的总重量填入手动输入框
+            weightInput.value = calculatorResult.totalWeight.toFixed(1);
+            
+            // 切换到手动输入标签
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            document.querySelector('.tab[data-tab="manual"]').classList.add('active');
+            document.getElementById('manual-tab').classList.add('active');
+            
+            // 显示提示
+            alert(`已将计算出的重量 ${calculatorResult.totalWeight.toFixed(1)} kg 应用到运费计算中`);
+        });
+        
+        // 标签切换功能
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.dataset.tab;
+                
+                // 更新标签状态
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 显示对应的内容
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId + '-tab').classList.add('active');
+            });
+        });
+        
+        // 计算运费
+        document.getElementById('calculateBtn').addEventListener('click', function() {
+            const destinationSelect = document.getElementById('destination');
+            const weightInput = document.getElementById('weight');
+            let weight = parseFloat(weightInput.value);
+            let extraCharge = 0;
+            
+            // 如果使用产品计算器，获取附加费用
+            const activeTab = document.querySelector('.tab.active');
+            if (activeTab && activeTab.dataset.tab === 'product') {
+                const calculatorResult = updateProductCalculator();
+                weight = calculatorResult.totalWeight;
+                extraCharge = calculatorResult.additionalCharge;
+            }
+            
+            // 验证输入
+            if (!destinationSelect.value) {
+                alert('请选择目的地！');
+                destinationSelect.focus();
+                return;
+            }
+            
+            if (!weight || weight <= 0) {
+                alert('请输入有效的货物重量！');
+                weightInput.focus();
+                return;
+            }
+            
+            // 获取选中的目的地数据
+            const selectedOption = destinationSelect.options[destinationSelect.selectedIndex];
+            const dataIndex = selectedOption.dataset.dataIndex;
+            const data = shippingData[dataIndex];
+            
+            // 确定适用的价格区间
+            let priceIndex;
+            if (weight <= 1) {
+                priceIndex = -1; // 仅首重
+            } else if (weight <= 50) {
+                priceIndex = 0;
+            } else if (weight <= 100) {
+                priceIndex = 1;
+            } else if (weight <= 300) {
+                priceIndex = 2;
+            } else if (weight <= 500) {
+                priceIndex = 3;
+            } else {
+                priceIndex = 4;
+            }
+            
+            // 计算运费
+            let totalFreight;
+            if (priceIndex === -1) {
+                totalFreight = data.firstWeightPrice;
+            } else {
+                totalFreight = data.firstWeightPrice + (weight - 1) * data.prices[priceIndex];
+            }
+            
+            // 如果运费低于最低收费，则按最低收费计算
+            if (totalFreight < data.minimumFreight) {
+                totalFreight = data.minimumFreight;
+            }
+            
+            // 加上附加费用
+            totalFreight += extraCharge;
+            
+            // 更新结果区域
+            document.getElementById('destinationResult').textContent = selectedOption.value;
+            document.getElementById('weightResult').textContent = weight.toFixed(1) + ' kg';
+            document.getElementById('extraChargeResult').textContent = extraCharge + ' 元';
+            document.getElementById('firstWeightPriceResult').textContent = data.firstWeightPrice + ' 元';
+            document.getElementById('minChargeResult').textContent = data.minimumFreight.toFixed(2) + ' 元';
+            document.getElementById('totalResult').textContent = totalFreight.toFixed(2) + ' 元';
+            
+            // 设置适用的区间单价
+            if (priceIndex === -1) {
+                document.getElementById('unitPriceResult').textContent = '仅首重';
+            } else {
+                document.getElementById('unitPriceResult').textContent = data.prices[priceIndex] + ' 元/kg';
+            }
+            
+            // 显示结果区域
+            document.getElementById('resultSection').style.display = 'block';
+            
+            // 滚动到结果区域
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // 页面加载时显示一些示例数据
+        window.addEventListener('load', function() {
+            // 默认选择第一个省份
+            if (provinces.length > 0) {
+                provinceSelect.value = provinces[0];
+                provinceSelect.dispatchEvent(new Event('change'));
+                
+                // 默认选择第一个目的地
+                setTimeout(() => {
+                    const destinationSelect = document.getElementById('destination');
+                    if (destinationSelect.options.length > 1) {
+                        destinationSelect.value = destinationSelect.options[1].value;
+                    }
+                    
+                    // 设置默认重量
+                    document.getElementById('weight').value = 30;
+                    
+                    // 触发产品计算器更新
+                    updateProductCalculator();
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>
