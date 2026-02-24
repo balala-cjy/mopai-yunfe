@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>摩派空间（天津）科技有限公司-项目服务报价计算器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "SimSun", "Microsoft YaHei", sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            padding: 20px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        
+        /* LOGO区域 */
+        .logo-area {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px dashed #ccc;
+        }
+        
+        .logo-area img {
+            max-width: 200px;
+            max-height: 80px;
+        }
+        
+        /* 顶部信息栏 */
+        .header-info {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .info-group {
+            flex: 1;
+            min-width: 180px;
+        }
+        
+        .info-group label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 3px;
+            font-size: 13px;
+        }
+        
+        .info-group input {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            font-size: 13px;
+        }
+        
+        /* 打印按钮 */
+        .print-section {
+            text-align: right;
+            margin-bottom: 15px;
+        }
+        
+        .print-btn {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 2px;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .print-btn:hover {
+            background-color: #555;
+        }
+        
+        /* 标题区域 */
+        .main-title {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .main-title h1 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .main-title .subtitle {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .table-header {
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
+        
+        /* 报价表格 */
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+        
+        .price-table th,
+        .price-table td {
+            border: 1px solid #000;
+            padding: 8px 10px;
+            text-align: center;
+        }
+        
+        .price-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        
+        /* 浅蓝色输入区（替换原黄色） */
+        .input-cell {
+            background-color: #E6F7FF;
+        }
+        
+        .input-cell input {
+            width: 70px;
+            padding: 4px 6px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            text-align: center;
+            font-size: 13px;
+        }
+        
+        .formula-cell {
+            background-color: #f8f8f8;
+        }
+        
+        .total-row {
+            background-color: #fafafa;
+            font-weight: bold;
+        }
+        
+        /* 说明区域 */
+        .tax-note, .validity-note {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+            font-size: 13px;
+            text-align: center;
+        }
+        
+        .tax-note {
+            background-color: #fff3cd;
+        }
+        
+        .validity-note {
+            background-color: #d1ecf1;
+        }
+        
+        /* 底部精简金额区 */
+        .bottom-amount {
+            padding: 10px 15px;
+            border: 1px solid #000;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .bottom-amount .amount-item {
+            margin: 5px 0;
+        }
+        
+        .bottom-amount .amount-value {
+            color: #d60000;
+            font-weight: bold;
+        }
+        
+        /* 签章区域 */
+        .signature-area {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+            font-size: 13px;
+        }
+        
+        .signature-col {
+            width: 45%;
+            text-align: center;
+        }
+        
+        .signature-line {
+            margin-top: 40px;
+            border-top: 1px solid #000;
+        }
+        
+        /* 打印样式 */
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                padding: 10px;
+            }
+            
+            .print-btn {
+                display: none;
+            }
+            
+            .logo-area {
+                border: none;
+            }
+            
+            .input-cell input {
+                border: none;
+                background-color: transparent;
+            }
+        }
+        
+        /* 响应式适配 */
+        @media (max-width: 992px) {
+            .header-info {
+                flex-direction: column;
+            }
+            
+            .price-table th, .price-table td {
+                padding: 5px 3px;
+                font-size: 12px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- LOGO区域（已集成你提供的图片） -->
+        <div class="logo-area">
+            <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/539c2016543e40be9b30139f9a9de758.png~tplv-a9rns2rl98-image.png?lk3s=8e244e95&rcl=20260212183103A9328A6FAF4C862CD27A&rrcfp=dafada99&x-expires=2087116263&x-signature=lKQb6RzQqSOPNTPnGQabWh0gnaQ%3D" 
+                 alt="摩派空间（天津）科技有限公司LOGO">
+        </div>
+        
+        <!-- 打印按钮 -->
+        <div class="print-section">
+            <button class="print-btn" onclick="window.print()">
+                <i class="fas fa-print"></i> 一键打印报价单
+            </button>
+        </div>
+        
+        <!-- 顶部信息栏 -->
+        <div class="header-info">
+            <div class="info-group">
+                <label for="customerName">客户名称</label>
+                <input type="text" id="customerName" placeholder="请输入客户名称" value="xxx项目">
+            </div>
+            <div class="info-group">
+                <label for="quoteDate">报价日期</label>
+                <input type="date" id="quoteDate" value="">
+            </div>
+            <div class="info-group">
+                <label for="validityPeriod">报价有效期</label>
+                <input type="text" id="validityPeriod" placeholder="请输入有效期" value="15天（自报价日起）">
+            </div>
+            <div class="info-group">
+                <label for="quoteNo">报价单号</label>
+                <input type="text" id="quoteNo" placeholder="自动生成或手动输入" value="MP-TJ-2024001">
+            </div>
+        </div>
+        
+        <!-- 主标题 -->
+        <div class="main-title">
+            <h1>摩派空间（天津）科技有限公司-项目服务报价单</h1>
+            <div class="subtitle">
+                鉴于贵司有意向就项目的服务部分与我司合作，我司根据项目已知情况对服务部分报价如下，所有价格均为不含税价格，含税价格另计（税率13%）。
+            </div>
+        </div>
+        
+        <div class="table-header">服务项清单</div>
+        
+        <!-- 报价表格 -->
+        <table class="price-table">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>基础服务项</th>
+                    <th>品牌</th>
+                    <th>规格</th>
+                    <th>数量</th>
+                    <th>单位</th>
+                    <th>服务单价(不含税)</th>
+                    <th>服务小计(不含税)</th>
+                    <th>服务小计(含税)</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>摄像头服务</td>
+                    <td>国产</td>
+                    <td>普通半球安装调试</td>
+                    <td class="input-cell">
+                        <input type="number" id="qty1" value="0" min="0" oninput="calculateAll()">
+                    </td>
+                    <td>台</td>
+                    <td class="formula-cell">240</td>
+                    <td class="formula-cell" id="subtotal1Excl">¥0.00</td>
+                    <td class="formula-cell" id="subtotal1Incl">¥0.00</td>
+                    <td>含安装、调试</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>门禁设备服务</td>
+                    <td>国产</td>
+                    <td>门禁电源控制器安装</td>
+                    <td class="input-cell">
+                        <input type="number" id="qty2" value="0" min="0" oninput="calculateAll()">
+                    </td>
+                    <td>个</td>
+                    <td class="formula-cell">650</td>
+                    <td class="formula-cell" id="subtotal2Excl">¥0.00</td>
+                    <td class="formula-cell" id="subtotal2Incl">¥0.00</td>
+                    <td>含安装、调试</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>智能货架组装</td>
+                    <td>国产</td>
+                    <td>国标</td>
+                    <td class="input-cell">
+                        <input type="number" id="qty3" value="0" min="0" oninput="calculateAll()">
+                    </td>
+                    <td>米</td>
+                    <td class="formula-cell" id="price3">200</td>
+                    <td class="formula-cell" id="subtotal3Excl">¥0.00</td>
+                    <td class="formula-cell" id="subtotal3Incl">¥0.00</td>
+                    <td id="note3">单价：200元/米</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>普通货架组装</td>
+                    <td>国产</td>
+                    <td>国标</td>
+                    <td class="input-cell">
+                        <input type="number" id="qty4" value="0" min="0" oninput="calculateAll()">
+                    </td>
+                    <td>米</td>
+                    <td class="formula-cell">20</td>
+                    <td class="formula-cell" id="subtotal4Excl">¥0.00</td>
+                    <td class="formula-cell" id="subtotal4Incl">¥0.00</td>
+                    <td>含组装、固定</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>辅材（网线、电源线等）</td>
+                    <td>国产</td>
+                    <td>国标</td>
+                    <td class="formula-cell" id="qty5">0</td>
+                    <td>米</td>
+                    <td class="formula-cell">45</td>
+                    <td class="formula-cell" id="subtotal5Excl">¥0.00</td>
+                    <td class="formula-cell" id="subtotal5Incl">¥0.00</td>
+                    <td>数量=智能+普通货架</td>
+                </tr>
+                <tr class="total-row">
+                    <td colspan="6" style="text-align: right;">报价总计(元):</td>
+                    <td></td>
+                    <td id="totalExclTaxRow">¥0.00</td>
+                    <td id="totalInclTaxRow">¥0.00</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- 税率说明 -->
+        <div class="tax-note">
+            税率说明：本报价适用增值税税率为13% | 含税价格计算公式：含税价格 = 不含税价格 × 1.13 | 价格单位：人民币（元）
+        </div>
+        
+        <!-- 有效期说明 -->
+        <div class="validity-note">
+            报价有效期：<span id="validityDisplay">15天（自报价日起）</span> | 说明：本报价基于当前项目需求制定，有效期内价格保持不变，超出有效期需重新确认。
+        </div>
+        
+        <!-- 底部精简金额区（核心需求） -->
+        <div class="bottom-amount">
+            <div class="amount-item">项目服务不含税总报价：<span class="amount-value" id="totalExclTaxBottom">¥0.00</span></div>
+            <div class="amount-item">项目服务含税总报价（13%增值税）：<span class="amount-value" id="totalInclTaxBottom">¥0.00</span></div>
+        </div>
+        
+        <!-- 签章区域 -->
+        <div class="signature-area">
+            <div class="signature-col">
+                <div>供方：摩派空间（天津）科技有限公司</div>
+                <div class="signature-line"></div>
+                <div>（盖章）</div>
+                <div>日期：________年________月________日</div>
+            </div>
+            <div class="signature-col">
+                <div>需方：</div>
+                <div class="signature-line"></div>
+                <div>（盖章/签字）</div>
+                <div>日期：________年________月________日</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 税率设置
+        const TAX_RATE = 0.13;
+        
+        // 页面加载初始化
+        window.onload = function() {
+            // 设置默认日期为当天
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            document.getElementById('quoteDate').value = formattedDate;
+            
+            // 监听有效期输入变化
+            document.getElementById('validityPeriod').addEventListener('input', function() {
+                document.getElementById('validityDisplay').textContent = this.value || '请设置有效期';
+            });
+            
+            // 初始化计算
+            calculateAll();
+            
+            // 输入框多事件监听
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.addEventListener('change', calculateAll);
+                input.addEventListener('keyup', calculateAll);
+                input.addEventListener('blur', calculateAll);
+            });
+        };
+        
+        // 核心计算函数
+        function calculateAll() {
+            // 获取输入数量
+            const qty1 = parseFloat(document.getElementById('qty1').value) || 0;
+            const qty2 = parseFloat(document.getElementById('qty2').value) || 0;
+            const qty3 = parseFloat(document.getElementById('qty3').value) || 0;
+            const qty4 = parseFloat(document.getElementById('qty4').value) || 0;
+            
+            // 智能货架单价逻辑
+            let price3 = 200;
+            let price3Note = "单价：200元/米";
+            if (qty1 > 0 && qty2 > 0) {
+                price3 = 100;
+                price3Note = "单价：100元/米（双设备优惠）";
+            }
+            
+            // 辅材数量计算
+            const qty5 = qty3 + qty4;
+            
+            // 单价常量
+            const price1 = 240;
+            const price2 = 650;
+            const price4 = 20;
+            const price5 = 45;
+            
+            // 计算不含税小计
+            const subtotal1Excl = qty1 * price1;
+            const subtotal2Excl = qty2 * price2;
+            const subtotal3Excl = qty3 * price3;
+            const subtotal4Excl = qty4 * price4;
+            const subtotal5Excl = qty5 * price5;
+            
+            // 计算含税小计
+            const subtotal1Incl = subtotal1Excl * (1 + TAX_RATE);
+            const subtotal2Incl = subtotal2Excl * (1 + TAX_RATE);
+            const subtotal3Incl = subtotal3Excl * (1 + TAX_RATE);
+            const subtotal4Incl = subtotal4Excl * (1 + TAX_RATE);
+            const subtotal5Incl = subtotal5Excl * (1 + TAX_RATE);
+            
+            // 总计计算
+            const totalExclTax = subtotal1Excl + subtotal2Excl + subtotal3Excl + subtotal4Excl + subtotal5Excl;
+            const totalInclTax = subtotal1Incl + subtotal2Incl + subtotal3Incl + subtotal4Incl + subtotal5Incl;
+            
+            // 金额格式化（千分位+保留2位小数）
+            function formatCurrency(value) {
+                return '¥' + value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            }
+            
+            // 更新页面显示
+            document.getElementById('price3').textContent = price3;
+            document.getElementById('note3').textContent = price3Note;
+            document.getElementById('qty5').textContent = qty5;
+            
+            // 更新各分项
+            document.getElementById('subtotal1Excl').textContent = formatCurrency(subtotal1Excl);
+            document.getElementById('subtotal1Incl').textContent = formatCurrency(subtotal1Incl);
+            document.getElementById('subtotal2Excl').textContent = formatCurrency(subtotal2Excl);
+            document.getElementById('subtotal2Incl').textContent = formatCurrency(subtotal2Incl);
+            document.getElementById('subtotal3Excl').textContent = formatCurrency(subtotal3Excl);
+            document.getElementById('subtotal3Incl').textContent = formatCurrency(subtotal3Incl);
+            document.getElementById('subtotal4Excl').textContent = formatCurrency(subtotal4Excl);
+            document.getElementById('subtotal4Incl').textContent = formatCurrency(subtotal4Incl);
+            document.getElementById('subtotal5Excl').textContent = formatCurrency(subtotal5Excl);
+            document.getElementById('subtotal5Incl').textContent = formatCurrency(subtotal5Incl);
+            
+            // 更新总计行
+            document.getElementById('totalExclTaxRow').textContent = formatCurrency(totalExclTax);
+            document.getElementById('totalInclTaxRow').textContent = formatCurrency(totalInclTax);
+            
+            // 更新底部精简金额区
+            document.getElementById('totalExclTaxBottom').textContent = formatCurrency(totalExclTax);
+            document.getElementById('totalInclTaxBottom').textContent = formatCurrency(totalInclTax);
+        }
+    </script>
+</body>
+</html>
