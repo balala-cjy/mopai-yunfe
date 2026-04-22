@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>天津始发陆运件运费计算器 - 完整增强版</title>
+    <title>天津始发陆运件运费计算器</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
@@ -526,7 +526,7 @@
         <header>
             <div class="header-content">
                 <div>
-                    <h1>天津始发陆运件运费计算器 - 完整增强版</h1>
+                    <h1>天津始发陆运件运费计算器</h1>
                     <div class="subtitle">天津摩派空间科技 · 支持产品重量计算 · 全国地区覆盖</div>
                 </div>
                 <div class="logo">
@@ -544,7 +544,6 @@
                     <div class="select-wrapper">
                         <select id="province">
                             <option value="">请选择目的省份/地区</option>
-                            <!-- 省份选项将通过JavaScript动态生成 -->
                         </select>
                     </div>
                 </div>
@@ -671,7 +670,19 @@
                                 </div>
                                 <div class="product-subtotal" id="subtotal-product7">0 kg</div>
                             </div>
-                            
+
+                             <div class="product-row">
+                                <div class="product-name">灯牌隔板（5个）</div>
+                                <div class="product-weight">2kg</div>
+                                <div class="product-quantity">
+                                    <div class="quantity-control">
+                                        <button class="qty-btn qty-minus" data-target="product8">-</button>
+                                        <input type="number" min="0" class="product-qty" data-weight="2" data-product="灯牌隔板（5个）" id="product8" value="0">
+                                        <button class="qty-btn qty-plus" data-target="product8">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-subtotal" id="subtotal-product8">0 kg</div>
+                            </div>
                             <div class="additional-charges">
                                 <div class="additional-option">
                                     <label for="add-cables">
@@ -790,14 +801,15 @@
                 <div class="info-card">
                     <h3><i class="fas fa-boxes"></i> 产品重量明细</h3>
                     <ul>
-                        <li><strong>灯条（单个）</strong>：0.5 kg</li>
-                        <li><strong>三米货架</strong>：82.8 kg</li>
+                        <li><strong>灯条（单个）</strong>：0.8 kg</li>
+                        <li><strong>三米货架</strong>：90 kg</li>
                         <li><strong>边缘设备</strong>：38 kg</li>
                         <li><strong>摄像头（单个）</strong>：1 kg</li>
                         <li><strong>门禁（一套）</strong>：4 kg</li>
                         <li><strong>快递柜500宽（单个）</strong>：217 kg</li>
                         <li><strong>快递柜350宽（单个）</strong>：143 kg</li>
-                        <li><strong>夹子和信号线（一箱）</strong>：5 kg（固定重量）</li>
+                        <li><strong>灯牌隔板（5个）</strong>：2 kg</li>
+                        <li><strong>夹子和信号线（一箱）</strong>：10 kg（固定重量）</li>
                         <li><strong>货架加长费</strong>：25元（费用，不计入重量）</li>
                     </ul>
                 </div>
@@ -839,17 +851,14 @@
     </div>
 
     <script>
-        // 完整运费数据（根据Excel表格整理）
         const shippingData = [
-            // 上海/江苏省/浙江省
             {
                 province: "上海/江苏省/浙江省",
                 destination: "苏州市/金华市/无锡市/南京市/宁波市/绍兴市/湖州市/嘉兴市/杭州市/常州市/扬州市/上海市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [2.25, 1.875, 1.575, 1.5, 1.35],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*2.25
+                minimumWeight: 30
             },
             {
                 province: "江苏省/浙江省",
@@ -857,8 +866,7 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [2.625, 2.25, 1.95, 1.8, 1.575],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*2.625
+                minimumWeight: 30
             },
             {
                 province: "江苏省/浙江省",
@@ -866,18 +874,15 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [2.625, 2.25, 1.95, 1.8, 1.575],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*2.625
+                minimumWeight: 30
             },
-            // 福建省
             {
                 province: "福建省",
                 destination: "厦门市/福州市/漳州市/泉州市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 2.625, 2.475, 2.325, 2.25],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
             {
                 province: "福建省",
@@ -885,18 +890,15 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 3, 2.85, 2.7, 2.625],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
-            // 山东省
             {
                 province: "山东省",
                 destination: "日照市/烟台市/青岛市/威海市/济南市/潍坊市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 3, 2.85, 2.7, 2.625],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
             {
                 province: "山东省",
@@ -904,28 +906,23 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 2.25, 1.95, 1.875, 1.8],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
-            // 四川省/重庆
             {
                 province: "四川省/重庆",
                 destination: "重庆市/眉山市/成都市/资阳市/绵阳市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 2.625, 2.325, 2.25, 1.875],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
-            // 山西省
             {
                 province: "山西省",
                 destination: "太原市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 2.25, 1.95, 1.875, 1.575],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
             {
                 province: "山西省",
@@ -933,18 +930,15 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 2.625, 2.1, 2.1, 1.95],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
-            // 贵州省
             {
                 province: "贵州省",
                 destination: "贵阳市/遵义市/安顺市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 3.15, 3.15, 3, 2.7],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
             {
                 province: "贵州省",
@@ -952,18 +946,15 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 3.75, 3.75, 3.6, 3.45],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
-            // 广东省
             {
                 province: "广东省",
                 destination: "深圳市/惠州市/江门市/中山市/东莞市/珠海市/广州市/佛山市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [2.25, 1.95, 1.95, 1.95, 1.575],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*2.25
+                minimumWeight: 30
             },
             {
                 province: "广东省",
@@ -971,8 +962,7 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3, 2.25, 2.25, 2.25, 1.95],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3
+                minimumWeight: 30
             },
             {
                 province: "广东省",
@@ -980,18 +970,15 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3, 2.25, 2.25, 2.25, 1.95],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3
+                minimumWeight: 30
             },
-            // 湖南省
             {
                 province: "湖南省",
                 destination: "湘潭市/长沙市/株洲市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 2.625, 2.325, 2.25, 2.025],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
             {
                 province: "湖南省",
@@ -999,18 +986,15 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 3, 2.85, 2.7, 2.625],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
-            // 湖北省
             {
                 province: "湖北省",
                 destination: "襄阳市/武汉市/鄂州市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 2.25, 2.025, 1.95, 1.725],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
             {
                 province: "湖北省",
@@ -1018,18 +1002,15 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 3.375, 3.375, 3.225, 3],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
-            // 安徽省
             {
                 province: "安徽省",
                 destination: "合肥市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3, 2.25, 1.95, 1.95, 1.575],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3
+                minimumWeight: 30
             },
             {
                 province: "安徽省",
@@ -1037,8 +1018,7 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3, 2.475, 2.25, 2.25, 1.875],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3
+                minimumWeight: 30
             },
             {
                 province: "安徽省",
@@ -1046,18 +1026,15 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3, 2.7, 2.625, 2.55, 2.25],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3
+                minimumWeight: 30
             },
-            // 四川省
             {
                 province: "四川省",
                 destination: "宜宾市/内江市/泸州市/广元市/南充市/达州市/广安市/巴中市/德阳市/雅安市/自贡市/遂宁市/乐山市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 3, 2.7, 2.625, 2.475],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
             {
                 province: "四川省",
@@ -1065,28 +1042,23 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [7.5, 6.75, 6.75, 6.75, 6.75],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*7.5
+                minimumWeight: 30
             },
-            // 新疆维吾尔自治区
             {
                 province: "新疆维吾尔自治区",
                 destination: "乌鲁木齐市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [7.5, 5.25, 4.875, 4.125, 4.125],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*7.5
+                minimumWeight: 30
             },
-            // 河南省
             {
                 province: "河南省",
                 destination: "许昌市/开封市/郑州市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3, 2.625, 2.625, 2.25, 2.1],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3
+                minimumWeight: 30
             },
             {
                 province: "河南省",
@@ -1094,18 +1066,15 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 3, 3, 2.625, 2.25],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
-            // 广西壮族自治区
             {
                 province: "广西壮族自治区",
                 destination: "崇左市/南宁市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3, 2.625, 2.625, 2.25, 1.95],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3
+                minimumWeight: 30
             },
             {
                 province: "广西壮族自治区",
@@ -1113,28 +1082,23 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 2.85, 2.85, 2.625, 2.475],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
-            // 海南省
             {
                 province: "海南省",
                 destination: "三沙市/昌江黎族自治县/临高县/琼中黎族苗族自治县/屯昌县/琼海市/陵水黎族自治县/澄迈县/海口市/保亭黎族苗族自治县/定安县/五指山市/儋州市/东方市/文昌市/万宁市/白沙黎族自治县/乐东黎族自治县/三亚市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 3.75, 3.75, 3.375, 3],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
-            // 江西省
             {
                 province: "江西省",
                 destination: "南昌市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 2.625, 2.325, 2.25, 2.025],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
             {
                 province: "江西省",
@@ -1142,38 +1106,31 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3, 2.85, 2.625, 2.475, 2.475],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3
+                minimumWeight: 30
             },
-            // 云南省
             {
                 province: "云南省",
                 destination: "昆明市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 2.625, 2.475, 2.4, 2.25],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
-            // 甘肃省
             {
                 province: "甘肃省",
                 destination: "临夏回族自治州/甘南藏族自治州/兰州市/天水市/陇南市/张掖市/嘉峪关市/酒泉市/庆阳市/金昌市/武威市/定西市/白银市/平凉市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [7.5, 3.375, 3.225, 3.225, 3],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*7.5
+                minimumWeight: 30
             },
-            // 陕西省
             {
                 province: "陕西省",
                 destination: "咸阳市/西安市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 2.625, 2.325, 2.25, 1.875],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
             {
                 province: "陕西省",
@@ -1181,18 +1138,15 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 3, 2.7, 2.625, 2.475],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
-            // 辽宁省
             {
                 province: "辽宁省",
                 destination: "大连市/本溪市/抚顺市/沈阳市/铁岭市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3, 2.625, 2.625, 2.625, 2.1],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3
+                minimumWeight: 30
             },
             {
                 province: "辽宁省",
@@ -1200,18 +1154,15 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 3.225, 2.85, 2.775, 2.625],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
-            // 吉林省/黑龙江省
             {
                 province: "吉林省/黑龙江省",
                 destination: "长春市/哈尔滨市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3, 2.625, 2.625, 2.625, 2.1],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3
+                minimumWeight: 30
             },
             {
                 province: "吉林省/黑龙江省",
@@ -1219,85 +1170,72 @@
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [3.75, 3.225, 2.85, 2.775, 2.625],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*3.75
+                minimumWeight: 30
             },
-            // 青海省
             {
                 province: "青海省",
                 destination: "西宁市/海东市/海北藏族自治州/黄南藏族自治州/海南藏族自治州/果洛藏族自治州/玉树藏族自治州/海西蒙古族藏族自治州",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [7.5, 6.75, 6.75, 6.75, 6.75],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*7.5
+                minimumWeight: 30
             },
-            // 宁夏回族自治区
             {
                 province: "宁夏回族自治区",
                 destination: "银川市/石嘴山市/吴忠市/固原市/中卫市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [7.5, 5.25, 4.875, 4.125, 4.125],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*7.5
+                minimumWeight: 30
             },
-            // 西藏自治区
             {
                 province: "西藏自治区",
                 destination: "拉萨市/日喀则市/昌都市/林芝市/山南市/那曲市/阿里地区",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [7.5, 7.5, 7.5, 7.5, 7.5],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*7.5
+                minimumWeight: 30
             },
-            // 内蒙古自治区
             {
                 province: "内蒙古自治区",
                 destination: "呼和浩特市/包头市/乌海市/赤峰市/通辽市/鄂尔多斯市/呼伦贝尔市/巴彦淖尔市/乌兰察布市/兴安盟/锡林郭勒盟/阿拉善盟",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 10,
                 prices: [7.5, 5.25, 4.875, 4.125, 4.125],
-                minimumWeight: 30,
-                minimumFreight: 10 + (30-1)*7.5
+                minimumWeight: 30
             },
-            // 天津
             {
                 province: "天津",
                 destination: "天津",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 11,
                 prices: [2.0, 1.5, 1, 0.9, 0.8],
-                minimumWeight: 5,
-                minimumFreight: 11 + (5-1)*2.0
+                minimumWeight: 5
             },
-            // 河北省
             {
                 province: "河北省",
                 destination: "承德市/唐山市/保定市/秦皇岛市/张家口市/邯郸市/石家庄市/衡水市/邢台市/沧州市",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 12,
                 prices: [2.5, 1.5, 1.3, 1.2, 1.1],
-                minimumWeight: 50,
-                minimumFreight: 12 + (50-1)*2.5
+                minimumWeight: 50
             },
-            // 北京/河北省
             {
                 province: "北京/河北省",
                 destination: "北京/廊坊",
                 chargeMethod: "对段加首重",
                 firstWeightPrice: 13,
                 prices: [2.0, 1.3, 1.2, 1.1, 1],
-                minimumWeight: 5,
-                minimumFreight: 13 + (5-1)*2.0  // 修正：使用正确的单价2.0而不是7.5
+                minimumWeight: 5
             }
         ];
 
-        // 获取所有不重复的省份
+        shippingData.forEach(item => {
+            item.minimumFreight = item.firstWeightPrice + (item.minimumWeight - 1) * item.prices[0];
+        });
+
         const provinces = [...new Set(shippingData.map(item => item.province))];
         
-        // 初始化省份下拉菜单
         const provinceSelect = document.getElementById('province');
         provinces.forEach(province => {
             const option = document.createElement('option');
@@ -1306,46 +1244,42 @@
             provinceSelect.appendChild(option);
         });
         
-        // 当省份改变时，更新目的地下拉菜单
         provinceSelect.addEventListener('change', function() {
             const destinationSelect = document.getElementById('destination');
             destinationSelect.innerHTML = '<option value="">请选择目的地</option>';
             destinationSelect.disabled = !this.value;
             
             if (this.value) {
+                const citySet = new Set();
                 const filteredData = shippingData.filter(item => item.province === this.value);
                 filteredData.forEach(item => {
                     const cities = item.destination.split('/');
-                    cities.forEach(city => {
-                        const option = document.createElement('option');
-                        option.value = city;
-                        option.textContent = city;
-                        option.dataset.dataIndex = shippingData.indexOf(item);
-                        destinationSelect.appendChild(option);
-                    });
+                    cities.forEach(city => citySet.add(city));
+                });
+                Array.from(citySet).sort().forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    destinationSelect.appendChild(option);
                 });
             }
         });
         
-        // 产品计算器功能
         const productInputs = document.querySelectorAll('.product-qty');
         const addCablesCheckbox = document.getElementById('add-cables');
         const addShelfFeeCheckbox = document.getElementById('add-shelf-fee');
         
-        // 更新产品重量计算
         function updateProductCalculator() {
             let productsTotal = 0;
             let additionalWeight = 0;
             let additionalCharge = 0;
             
-            // 计算产品总重量
             productInputs.forEach(input => {
                 const quantity = parseInt(input.value) || 0;
                 const weight = parseFloat(input.dataset.weight);
                 const subtotal = quantity * weight;
                 const productId = input.id;
                 
-                // 更新小计显示
                 const subtotalElement = document.getElementById(`subtotal-${productId}`);
                 if (subtotalElement) {
                     subtotalElement.textContent = subtotal.toFixed(1) + ' kg';
@@ -1354,7 +1288,6 @@
                 productsTotal += subtotal;
             });
             
-            // 检查附加项
             if (addCablesCheckbox.checked) {
                 additionalWeight += parseFloat(addCablesCheckbox.dataset.weight);
             }
@@ -1363,7 +1296,6 @@
                 additionalCharge += parseFloat(addShelfFeeCheckbox.dataset.charge);
             }
             
-            // 更新显示
             document.getElementById('products-total').textContent = productsTotal.toFixed(1) + ' kg';
             document.getElementById('additional-weight').textContent = additionalWeight + ' kg';
             document.getElementById('additional-charge').textContent = additionalCharge + ' 元';
@@ -1371,14 +1303,9 @@
             const totalWeight = productsTotal + additionalWeight;
             document.getElementById('total-weight').textContent = totalWeight.toFixed(1) + ' kg';
             
-            // 返回总重量和附加费用
-            return {
-                totalWeight: totalWeight,
-                additionalCharge: additionalCharge
-            };
+            return { totalWeight, additionalCharge };
         }
         
-        // 为产品数量加减按钮添加事件监听
         document.querySelectorAll('.qty-plus').forEach(button => {
             button.addEventListener('click', function() {
                 const targetId = this.dataset.target;
@@ -1400,45 +1327,34 @@
             });
         });
         
-        // 为产品输入框添加事件监听
         productInputs.forEach(input => {
             input.addEventListener('input', updateProductCalculator);
         });
         
-        // 为附加选项添加事件监听
         addCablesCheckbox.addEventListener('change', updateProductCalculator);
         addShelfFeeCheckbox.addEventListener('change', updateProductCalculator);
         
-        // 应用重量按钮
         document.getElementById('applyWeightBtn').addEventListener('click', function() {
             const calculatorResult = updateProductCalculator();
             const weightInput = document.getElementById('weight');
-            
-            // 将计算出的总重量填入手动输入框
             weightInput.value = calculatorResult.totalWeight.toFixed(1);
             
-            // 切换到手动输入标签
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             
             document.querySelector('.tab[data-tab="manual"]').classList.add('active');
             document.getElementById('manual-tab').classList.add('active');
             
-            // 显示提示
             alert(`已将计算出的重量 ${calculatorResult.totalWeight.toFixed(1)} kg 应用到运费计算中`);
         });
         
-        // 标签切换功能
         const tabs = document.querySelectorAll('.tab');
         tabs.forEach(tab => {
             tab.addEventListener('click', function() {
                 const tabId = this.dataset.tab;
-                
-                // 更新标签状态
                 tabs.forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
                 
-                // 显示对应的内容
                 document.querySelectorAll('.tab-content').forEach(content => {
                     content.classList.remove('active');
                 });
@@ -1446,22 +1362,15 @@
             });
         });
         
-        // 计算运费
         document.getElementById('calculateBtn').addEventListener('click', function() {
             const destinationSelect = document.getElementById('destination');
             const weightInput = document.getElementById('weight');
             let weight = parseFloat(weightInput.value);
             let extraCharge = 0;
+
+            const calcRes = updateProductCalculator();
+            extraCharge = calcRes.additionalCharge;
             
-            // 如果使用产品计算器，获取附加费用
-            const activeTab = document.querySelector('.tab.active');
-            if (activeTab && activeTab.dataset.tab === 'product') {
-                const calculatorResult = updateProductCalculator();
-                weight = calculatorResult.totalWeight;
-                extraCharge = calculatorResult.additionalCharge;
-            }
-            
-            // 验证输入
             if (!destinationSelect.value) {
                 alert('请选择目的地！');
                 destinationSelect.focus();
@@ -1474,15 +1383,14 @@
                 return;
             }
             
-            // 获取选中的目的地数据
-            const selectedOption = destinationSelect.options[destinationSelect.selectedIndex];
-            const dataIndex = selectedOption.dataset.dataIndex;
-            const data = shippingData[dataIndex];
+            const selectedCity = destinationSelect.value;
+            const data = shippingData.find(item => 
+                item.destination.split('/').includes(selectedCity)
+            );
             
-            // 确定适用的价格区间
             let priceIndex;
             if (weight <= 1) {
-                priceIndex = -1; // 仅首重
+                priceIndex = -1;
             } else if (weight <= 50) {
                 priceIndex = 0;
             } else if (weight <= 100) {
@@ -1495,7 +1403,6 @@
                 priceIndex = 4;
             }
             
-            // 计算运费
             let totalFreight;
             if (priceIndex === -1) {
                 totalFreight = data.firstWeightPrice;
@@ -1503,54 +1410,40 @@
                 totalFreight = data.firstWeightPrice + (weight - 1) * data.prices[priceIndex];
             }
             
-            // 如果运费低于最低收费，则按最低收费计算
             if (totalFreight < data.minimumFreight) {
                 totalFreight = data.minimumFreight;
             }
             
-            // 加上附加费用
             totalFreight += extraCharge;
             
-            // 更新结果区域
-            document.getElementById('destinationResult').textContent = selectedOption.value;
+            document.getElementById('destinationResult').textContent = selectedCity;
             document.getElementById('weightResult').textContent = weight.toFixed(1) + ' kg';
             document.getElementById('extraChargeResult').textContent = extraCharge + ' 元';
             document.getElementById('firstWeightPriceResult').textContent = data.firstWeightPrice + ' 元';
             document.getElementById('minChargeResult').textContent = data.minimumFreight.toFixed(2) + ' 元';
             document.getElementById('totalResult').textContent = totalFreight.toFixed(2) + ' 元';
             
-            // 设置适用的区间单价
             if (priceIndex === -1) {
                 document.getElementById('unitPriceResult').textContent = '仅首重';
             } else {
                 document.getElementById('unitPriceResult').textContent = data.prices[priceIndex] + ' 元/kg';
             }
             
-            // 显示结果区域
             document.getElementById('resultSection').style.display = 'block';
-            
-            // 滚动到结果区域
             document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
         });
         
-        // 页面加载时显示一些示例数据
         window.addEventListener('load', function() {
-            // 默认选择第一个省份
             if (provinces.length > 0) {
                 provinceSelect.value = provinces[0];
                 provinceSelect.dispatchEvent(new Event('change'));
                 
-                // 默认选择第一个目的地
                 setTimeout(() => {
                     const destinationSelect = document.getElementById('destination');
                     if (destinationSelect.options.length > 1) {
                         destinationSelect.value = destinationSelect.options[1].value;
                     }
-                    
-                    // 设置默认重量
                     document.getElementById('weight').value = 30;
-                    
-                    // 触发产品计算器更新
                     updateProductCalculator();
                 }, 100);
             }
@@ -1558,11 +1451,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
