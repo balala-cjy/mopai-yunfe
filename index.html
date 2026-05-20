@@ -566,7 +566,7 @@
                     <div class="tab-content active" id="manual-tab">
                         <label for="weight"><i class="fas fa-weight-hanging"></i> 输入货物重量 (kg)</label>
                         <div class="input-wrapper weight-input">
-                            <input type="number" id="weight" min="1" step="0.1" placeholder="例如：30">
+                            <input type="number" id="weight" min="0.1" step="0.1" placeholder="例如：30">
                             <div class="unit">公斤</div>
                         </div>
                         <div class="weight-range-info">
@@ -673,7 +673,7 @@
 
                              <div class="product-row">
                                 <div class="product-name">灯牌隔板（5个）</div>
-                                <div class="product-weight">2kg</div>
+                                <div class="product-weight">2 kg</div>
                                 <div class="product-quantity">
                                     <div class="quantity-control">
                                         <button class="qty-btn qty-minus" data-target="product8">-</button>
@@ -682,6 +682,19 @@
                                     </div>
                                 </div>
                                 <div class="product-subtotal" id="subtotal-product8">0 kg</div>
+                            </div>
+
+                             <div class="product-row">
+                                <div class="product-name">灯牌（夹子款）10个</div>
+                                <div class="product-weight">0.9 kg</div>
+                                <div class="product-quantity">
+                                    <div class="quantity-control">
+                                        <button class="qty-btn qty-minus" data-target="product9">-</button>
+                                        <input type="number" min="0" class="product-qty" data-weight="0.9" data-product="灯牌（夹子款）10个" id="product9" value="0">
+                                        <button class="qty-btn qty-plus" data-target="product9">+</button>
+                                    </div>
+                                </div>
+                                <div class="product-subtotal" id="subtotal-product9">0 kg</div>
                             </div>
                             <div class="additional-charges">
                                 <div class="additional-option">
@@ -809,6 +822,7 @@
                         <li><strong>快递柜500宽（单个）</strong>：217 kg</li>
                         <li><strong>快递柜350宽（单个）</strong>：143 kg</li>
                         <li><strong>灯牌隔板（5个）</strong>：2 kg</li>
+                        <li><strong>灯牌（夹子款）</strong>：0.9 kg</li>
                         <li><strong>夹子和信号线（一箱）</strong>：10 kg（固定重量）</li>
                         <li><strong>货架加长费</strong>：25元（费用，不计入重量）</li>
                     </ul>
@@ -1230,13 +1244,18 @@
             }
         ];
 
+        // 计算最低运费
         shippingData.forEach(item => {
             item.minimumFreight = item.firstWeightPrice + (item.minimumWeight - 1) * item.prices[0];
         });
 
+        // 获取不重复的省份列表
         const provinces = [...new Set(shippingData.map(item => item.province))];
         
         const provinceSelect = document.getElementById('province');
+        const destinationSelect = document.getElementById('destination');
+
+        // 初始化省份下拉框
         provinces.forEach(province => {
             const option = document.createElement('option');
             option.value = province;
@@ -1244,8 +1263,8 @@
             provinceSelect.appendChild(option);
         });
         
+        // 省份切换联动城市
         provinceSelect.addEventListener('change', function() {
-            const destinationSelect = document.getElementById('destination');
             destinationSelect.innerHTML = '<option value="">请选择目的地</option>';
             destinationSelect.disabled = !this.value;
             
@@ -1254,8 +1273,9 @@
                 const filteredData = shippingData.filter(item => item.province === this.value);
                 filteredData.forEach(item => {
                     const cities = item.destination.split('/');
-                    cities.forEach(city => citySet.add(city));
+                    cities.forEach(city => citySet.add(city.trim()));
                 });
+                // 排序并添加城市选项
                 Array.from(citySet).sort().forEach(city => {
                     const option = document.createElement('option');
                     option.value = city;
@@ -1269,13 +1289,18 @@
         const addCablesCheckbox = document.getElementById('add-cables');
         const addShelfFeeCheckbox = document.getElementById('add-shelf-fee');
         
+        // 更新产品计算器总重量
         function updateProductCalculator() {
             let productsTotal = 0;
             let additionalWeight = 0;
             let additionalCharge = 0;
             
             productInputs.forEach(input => {
-                const quantity = parseInt(input.value) || 0;
+                // 强制校验最小值，防止输入负数
+                let quantity = parseInt(input.value) || 0;
+                quantity = Math.max(0, quantity);
+                input.value = quantity;
+
                 const weight = parseFloat(input.dataset.weight);
                 const subtotal = quantity * weight;
                 const productId = input.id;
@@ -1288,6 +1313,7 @@
                 productsTotal += subtotal;
             });
             
+            // 计算附加重量/费用
             if (addCablesCheckbox.checked) {
                 additionalWeight += parseFloat(addCablesCheckbox.dataset.weight);
             }
@@ -1296,6 +1322,7 @@
                 additionalCharge += parseFloat(addShelfFeeCheckbox.dataset.charge);
             }
             
+            // 更新页面显示
             document.getElementById('products-total').textContent = productsTotal.toFixed(1) + ' kg';
             document.getElementById('additional-weight').textContent = additionalWeight + ' kg';
             document.getElementById('additional-charge').textContent = additionalCharge + ' 元';
@@ -1306,6 +1333,7 @@
             return { totalWeight, additionalCharge };
         }
         
+        // 产品数量 + 按钮
         document.querySelectorAll('.qty-plus').forEach(button => {
             button.addEventListener('click', function() {
                 const targetId = this.dataset.target;
@@ -1315,6 +1343,7 @@
             });
         });
         
+        // 产品数量 - 按钮
         document.querySelectorAll('.qty-minus').forEach(button => {
             button.addEventListener('click', function() {
                 const targetId = this.dataset.target;
@@ -1327,18 +1356,22 @@
             });
         });
         
+        // 手动输入产品数量时校验
         productInputs.forEach(input => {
             input.addEventListener('input', updateProductCalculator);
         });
         
+        // 附加选项变更
         addCablesCheckbox.addEventListener('change', updateProductCalculator);
         addShelfFeeCheckbox.addEventListener('change', updateProductCalculator);
         
+        // 应用重量按钮
         document.getElementById('applyWeightBtn').addEventListener('click', function() {
             const calculatorResult = updateProductCalculator();
             const weightInput = document.getElementById('weight');
             weightInput.value = calculatorResult.totalWeight.toFixed(1);
             
+            // 切换到手动输入标签
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             
@@ -1348,6 +1381,7 @@
             alert(`已将计算出的重量 ${calculatorResult.totalWeight.toFixed(1)} kg 应用到运费计算中`);
         });
         
+        // 标签切换
         const tabs = document.querySelectorAll('.tab');
         tabs.forEach(tab => {
             tab.addEventListener('click', function() {
@@ -1362,32 +1396,38 @@
             });
         });
         
+        // 计算运费主逻辑
         document.getElementById('calculateBtn').addEventListener('click', function() {
-            const destinationSelect = document.getElementById('destination');
             const weightInput = document.getElementById('weight');
-            let weight = parseFloat(weightInput.value);
-            let extraCharge = 0;
+            // 强制校验重量，防止非法值
+            let weight = parseFloat(weightInput.value) || 0;
+            weight = Math.max(0.1, weight);
+            weightInput.value = weight.toFixed(1);
 
+            let extraCharge = 0;
+            // 获取附加费用
             const calcRes = updateProductCalculator();
             extraCharge = calcRes.additionalCharge;
             
+            // 校验必填项
             if (!destinationSelect.value) {
                 alert('请选择目的地！');
                 destinationSelect.focus();
                 return;
             }
             
-            if (!weight || weight <= 0) {
-                alert('请输入有效的货物重量！');
-                weightInput.focus();
+            // 查找匹配的运费数据
+            const selectedCity = destinationSelect.value;
+            const data = shippingData.find(item => 
+                item.destination.split('/').some(city => city.trim() === selectedCity)
+            );
+
+            if(!data){
+                alert('未找到该目的地的运费数据！');
                 return;
             }
             
-            const selectedCity = destinationSelect.value;
-            const data = shippingData.find(item => 
-                item.destination.split('/').includes(selectedCity)
-            );
-            
+            // 判断重量区间
             let priceIndex;
             if (weight <= 1) {
                 priceIndex = -1;
@@ -1403,6 +1443,7 @@
                 priceIndex = 4;
             }
             
+            // 计算运费
             let totalFreight;
             if (priceIndex === -1) {
                 totalFreight = data.firstWeightPrice;
@@ -1410,12 +1451,15 @@
                 totalFreight = data.firstWeightPrice + (weight - 1) * data.prices[priceIndex];
             }
             
+            // 最低收费兜底
             if (totalFreight < data.minimumFreight) {
                 totalFreight = data.minimumFreight;
             }
             
+            // 加上附加费用
             totalFreight += extraCharge;
             
+            // 填充结果
             document.getElementById('destinationResult').textContent = selectedCity;
             document.getElementById('weightResult').textContent = weight.toFixed(1) + ' kg';
             document.getElementById('extraChargeResult').textContent = extraCharge + ' 元';
@@ -1429,22 +1473,17 @@
                 document.getElementById('unitPriceResult').textContent = data.prices[priceIndex] + ' 元/kg';
             }
             
+            // 显示结果区域
             document.getElementById('resultSection').style.display = 'block';
             document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
         });
         
+        // 页面加载完成初始化
         window.addEventListener('load', function() {
+            updateProductCalculator();
             if (provinces.length > 0) {
-                provinceSelect.value = provinces[0];
-                provinceSelect.dispatchEvent(new Event('change'));
-                
                 setTimeout(() => {
-                    const destinationSelect = document.getElementById('destination');
-                    if (destinationSelect.options.length > 1) {
-                        destinationSelect.value = destinationSelect.options[1].value;
-                    }
                     document.getElementById('weight').value = 30;
-                    updateProductCalculator();
                 }, 100);
             }
         });
